@@ -61,7 +61,7 @@ def generate_noisy_linear(num_samples, weights, sigma, limits, rng):
     """
     
     # TODO: implement this
-    return None, None
+    return utils.random_sample(lambda x: utils.affine(x, weights), len(weights) - 1, num_samples, limits, rng, sigma)
 
 
 def plot_noisy_linear_1d(axes, num_samples, weights, sigma, limits, rng):
@@ -87,9 +87,18 @@ def plot_noisy_linear_1d(axes, num_samples, weights, sigma, limits, rng):
     """
     assert(len(weights)==2)
     X, y = generate_noisy_linear(num_samples, weights, sigma, limits, rng)
+
+    axes.plot(X, y, color='red', marker='o', linestyle='')
     
-    # TODO: do the plotting
-    utils.plot_unimplemented ( axes, 'Noisy 1D Linear Model' )
+    y0 = weights[0] + limits[0] * weights[1]
+    y1 = weights[0] + limits[1] * weights[1]
+    axes.plot(limits, (y0, y1), linestyle='dashed', color='green', marker='')
+
+    axes.set_title('Noisy 1D Linear Model')
+    axes.set_xlim(limits[0], limits[1])
+    axes.set_ylim(limits[0], limits[1])
+    axes.set_xlabel('$x$')
+    axes.set_ylabel('$y$')
 
 
 def plot_noisy_linear_2d(axes, resolution, weights, sigma, limits, rng):
@@ -112,9 +121,17 @@ def plot_noisy_linear_2d(axes, resolution, weights, sigma, limits, rng):
     """
     assert(len(weights)==3)
     
-    # TODO: generate the data
-    # TODO: do the plotting
-    utils.plot_unimplemented ( axes, 'Noisy 2D Linear Model' )
+    X, y = utils.grid_sample(lambda x: utils.affine(x, weights), 2, resolution, limits, rng, sigma)
+                       
+    axes.imshow(y.T, cmap='GnBu', origin='lower', extent=(limits[0], limits[1], limits[0], limits[1]) )
+    
+    levels = np.linspace(np.min(y), np.max(y), 10)
+    axes.contour(y.T, levels, colors='white', origin='lower', extent=(limits[0], limits[1], limits[0], limits[1]) )
+
+    axes.set_xlabel('$x_1$')
+    axes.set_ylabel('$x_2$')
+    
+    axes.set_title('Noisy 2D Linear Model')
 
 
 # -- Question 2 --
