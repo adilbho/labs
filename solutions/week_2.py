@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 
 import utils
 
-from week_1_working import generate_noisy_linear, generate_linearly_separable
+from week_1 import generate_noisy_linear, generate_linearly_separable
 
 #### ADD YOUR CODE BELOW
 
